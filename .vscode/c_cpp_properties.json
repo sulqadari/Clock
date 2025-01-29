@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/inc",
-				"${workspaceFolder}/inc/CMSIS"
+				"${workspaceFolder}/inc/CMSIS",
+				"${workspaceFolder}/inc/hal"
             ],
             "defines": [
 			],

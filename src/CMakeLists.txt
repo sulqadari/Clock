@@ -3,11 +3,13 @@ add_executable(${ENTRY_POINT}.elf
 	startup_stm32f103xb.s
 	system_stm32f1xx.c
 	${hal_path}/clock_src.c
+	${hal_path}/port_hdlr.c
 )
 
 target_include_directories(${ENTRY_POINT}.elf
 	PUBLIC ${PROJECT_SOURCE_DIR}/inc
 	PUBLIC ${PROJECT_SOURCE_DIR}/inc/CMSIS
+	PUBLIC ${PROJECT_SOURCE_DIR}/inc/hal
 )
 
 add_custom_command(TARGET ${ENTRY_POINT}.elf

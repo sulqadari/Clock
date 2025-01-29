@@ -1,13 +1,11 @@
-#include <stdint.h>
-#include "stm32f1xx.h"
+#include  "clock_src.h"
 
 /** See RM0008, clause 7.3 'RCC registers'. */
 int32_t
-clockInit(void)
+hal_clockInit(void)
 {
 	RCC->CR   |= RCC_CR_HSEON;		// Enable 8 MHz oscillator
 	while (1) {						// Loop until HSE clock source is ready.
-		
 		if (RCC->CR & RCC_CR_HSERDY)
 			break;
 	}
