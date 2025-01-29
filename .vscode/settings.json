@@ -1,7 +1,14 @@
 {
 	"files.associations": {
+		"*.fn": "java",
+		"00_Preface": "markdown",
+		"*.tivm": "javascript",
+		"*.txt": "cmake",
+		"*.fv": "javascript",
 		"*.jcsh": "shellscript",
 		"stm32f1xx.h": "c",
-		"stm32f103xb.h": "c"
+		"stm32f103xb.h": "c",
+		"gpio_hdlr.h": "c",
+		"rcc_hdlr.h": "c"
 	}
 }
