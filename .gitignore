@@ -1,0 +1,5 @@
+build/
+*.bin
+*.elf
+*.log
+*.swp
