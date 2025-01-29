@@ -2,7 +2,7 @@ add_executable(${ENTRY_POINT}.elf
 	main.c
 	startup_stm32f103xb.s
 	system_stm32f1xx.c
-	${hal_path}/clock_src.c
+	${hal_path}/clock_hdlr.c
 	${hal_path}/port_hdlr.c
 )
 

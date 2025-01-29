@@ -14,13 +14,13 @@ hal_setPortMode(void)
 }
 
 void
-hal_PinHigh(void)
+hal_pinHigh(void)
 {
 	GPIOC->BSRR = GPIO_BSRR_BS13;
 }
 
 void
-hal_PinLow(void)
+hal_pinLow(void)
 {
 	GPIOC->BRR = GPIO_BSRR_BS13;
 }

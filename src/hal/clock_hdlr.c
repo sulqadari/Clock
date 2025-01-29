@@ -1,4 +1,4 @@
-#include  "clock_src.h"
+#include  "clock_hdlr.h"
 
 /** See RM0008, clause 7.3 'RCC registers'. */
 int32_t

@@ -1,9 +1,9 @@
-#ifndef CLOCK_SRC_H
-#define CLOCK_SRC_H
+#ifndef CLOCK_HDLR_H
+#define CLOCK_HDLR_H
 
 #include <stdint.h>
 #include "stm32f1xx.h"
 
 int32_t hal_clockInit(void);
 
-#endif /* CLOCK_SRC_H */
+#endif /* CLOCK_HDLR_H */

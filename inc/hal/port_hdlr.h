@@ -6,7 +6,7 @@
 
 void hal_enablePort(void);
 void hal_setPortMode(void);
-void hal_PinHigh(void);
-void hal_PinLow(void);
+void hal_pinHigh(void);
+void hal_pinLow(void);
 
 #endif /* PORT_HDLR_H */
