@@ -9,6 +9,7 @@
 		"stm32f1xx.h": "c",
 		"stm32f103xb.h": "c",
 		"gpio_hdlr.h": "c",
-		"rcc_hdlr.h": "c"
+		"rcc_hdlr.h": "c",
+		"spi_hdlr.h": "c"
 	}
 }

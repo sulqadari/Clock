@@ -26,7 +26,7 @@ add_link_options(
 	-mthumb
 	"LINKER:--gc-sections"	# used in conjunction with '-fdata-sections -ffunction-sections'
 	"LINKER:-T,${CMAKE_SOURCE_DIR}/src/STM32F103XB_FLASH.ld"
-	"LINKER:-Map=feeder.map"
+	"LINKER:-Map=${ENTRY_POINT}.map"
 )
 
 

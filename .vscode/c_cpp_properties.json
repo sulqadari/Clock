@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/inc",
 				"${workspaceFolder}/inc/CMSIS",
-				"${workspaceFolder}/inc/hal"
+				"${workspaceFolder}/inc/hal",
+				"${workspaceFolder}/src/ssd1306"
             ],
             "defines": [
 			],
