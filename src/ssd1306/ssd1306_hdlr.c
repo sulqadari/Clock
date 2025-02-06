@@ -7,22 +7,18 @@ static void
 trasmit_command(uint8_t command)
 {
 	COMMAND;
-	spi_trasmit(command);
+	spi_trasmit(command, sizeof(uint8_t));
 	DATA;
 }
 
 void
 ssd1306_init(void)
 {
-	GPIOA->CRL |= GPIO_CRL_MODE2 |GPIO_CRL_MODE1 | GPIO_CRL_MODE3;
-	GPIOA->CRL &= ~(GPIO_CRL_CNF1 | GPIO_CRL_CNF2 | GPIO_CRL_CNF3);	// Configure ports PA1,PA2,PA3 as output
 	
-	RESET_RES;									// Reset the screen and 
+	// RESET_RES;									// Reset the screen and 
 	for(uint16_t i = 0; i < BUFFER_SIZE; i++)	// flush the buffer
 		displayBuff[i] = 0;
 
-	RESET_SET;
-	CS_SET;		// Select the slave
 
 	trasmit_command(0xAE); //display off
 	trasmit_command(0xD5); //Set Memory Addressing Mode
@@ -52,24 +48,9 @@ ssd1306_init(void)
 }
 
 void
-ssd1306_enable_dma(void)
-{
-	DATA;
-	DMA1_Channel3->CCR  &= ~(DMA_CCR_EN);			// Provide the DMA with the clock
-	DMA1_Channel3->CPAR  = (uint32_t)(&SPI1->DR);	// Store in DMA the SPI data register
-	DMA1_Channel3->CMAR  = (uint32_t)&displayBuff;	// Data address
-	DMA1_Channel3->CNDTR = sizeof(displayBuff);		// Data size
-	DMA1->IFCR          &= ~(DMA_IFCR_CGIF3);
-	
-	CS_RES; //Select the slave
-	DMA1_Channel3->CCR |= DMA_CCR_CIRC;	// Set cyclic mode of the DMA
-	DMA1_Channel3->CCR |= DMA_CCR_EN;	// Enable DMA
-}
-
-void
 ssd1306_fill_display(Color color)
 {
-	for (uint16_t i = 0; i < SSD1306_WIDTH; ++i) {
+	for (uint16_t i = 0; i < BUFFER_SIZE; ++i) {
 		displayBuff[i] = color;
 	}
 }

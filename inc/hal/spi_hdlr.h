@@ -14,6 +14,6 @@
 #define COMMAND		GPIOA->BSRR |= GPIO_BSRR_BR3
 
 void spi_init_with_dma(void);
-void spi_trasmit(uint8_t byte);
+void spi_trasmit(uint8_t* data, uint16_t len);
 
 #endif /* SPI_HDLR_H */

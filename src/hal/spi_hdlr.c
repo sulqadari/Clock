@@ -1,35 +1,40 @@
 #include "spi_hdlr.h"
+#include "rcc_hdlr.h"
 
 void
 spi_init_with_dma(void)
 {
-	RCC->APB2ENR |= (RCC_APB2ENR_SPI1EN | RCC_APB2ENR_IOPAEN); // Enable port A and SPI1
-	RCC->AHBENR  |= RCC_AHBENR_DMA1EN; // Enable DMA 1
+	rcc_periph_clock_enable(RCC_SPI1);
+	rcc_periph_clock_enable(RCC_DMA1);
 	
-	GPIOA->CRL |= (GPIO_CRL_MODE5  | GPIO_CRL_MODE7);	// Configure ports No A4, A5 and A7 as output with 50MHz clock rate.
-	GPIOA->CRL &= (GPIO_CRL_CNF5   | GPIO_CRL_CNF7);	// Clean the state of ports No A5 and A7
-	GPIOA->CRL |= (GPIO_CRL_CNF5_1 | GPIO_CRL_CNF7_1);	// Refigure ports No A5 and A7 as output alternate functions in push-pull mode,
-														// while A4 is left in default state (ordinary output in push-pull mode)
-	SPI1->CR1 |= SPI_CR1_MSTR;	// Set SPI1 as master
-	SPI1->CR1 &= ~SPI_CR1_BR;	// Divider 2
-	SPI1->CR1 |= SPI_CR1_SSM;	// Software-handled NSS
-	SPI1->CR1 |= SPI_CR1_SSI;	// Set NSS to high
-	SPI1->CR2 |= SPI_CR2_TXDMAEN;	// Enable DMA requests.
-	SPI1->CR1 |= SPI_CR1_SPE;	// Enable SPI
+	CLEAR_REG(GPIOA->CRL);
 
-	DMA1_Channel3->CCR |= DMA_CCR_PSIZE_0;	// The size of peripheral equals 1 byte
-	DMA1_Channel3->CCR |= DMA_CCR_DIR;		// Direction: from DMA to peripheral
-	DMA1_Channel3->CCR |= DMA_CCR_MINC;		// Enable memory increment
-	DMA1_Channel3->CCR |= DMA_CCR_PL;		// DMA hash highest priority
+	gpio_set_mode(GPIOA_BASE, GPIO_MODE_OUTPUT_2_MHZ, GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO5 | GPIO7);
+	gpio_set_mode(GPIOA_BASE, GPIO_MODE_OUTPUT_2_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO4);
+	
+	SET_BIT(SPI1->CR1, SPI_CR1_MSTR);	// Set SPI1 as master
+	CLEAR_BIT(SPI1->CR1, SPI_CR1_BR_2);	// Speed rate: F_PCLK / 32
+	SET_BIT(SPI1->CR1, SPI_CR1_SSM);	// Software-handled NSS
+	SET_BIT(SPI1->CR1, SPI_CR1_SSI);	// Set NSS to high
+
+	SET_BIT(SPI1->CR2, SPI_CR2_TXDMAEN);	// Enable DMA requests.
+	SET_BIT(SPI1->CR1, SPI_CR1_SPE);	// Enable SPI
 }
 
 void
-spi_trasmit(uint8_t byte)
+spi_trasmit(uint8_t* data, uint16_t len)
 {
-	CS_RES;
-	
-	while (!(SPI1->SR & SPI_SR_TXE)) { }
-	SPI1->DR = byte;
+	CLEAR_BIT(DMA1_Channel3->CCR, DMA_CCR_EN);	// Turn DMA off
+	DMA1_Channel3->CPAR = (uint32_t)&SPI1->DR;	// Get address of SPI1->DR and store it in DMA
+	DMA1_Channel3->CMAR = (uint32_t)data;		// Get address of data to be sent and store it in DMA
+	DMA1_Channel3->CNDTR = len;
 
-	CS_SET;
+	CLEAR_BIT(DMA1_Channel3->CCR, DMA_CCR_MEM2MEM);	// Disable M2M mode
+	CLEAR_BIT(DMA1_Channel3->CCR, DMA_CCR_PL);		// lowest priority
+	CLEAR_BIT(DMA1_Channel3->CCR, DMA_CCR_MSIZE);	// 8-bit memory size
+	SET_BIT(DMA1_Channel3->CCR, DMA_CCR_PSIZE_0);	// Peripheral size equals 16 bit
+	SET_BIT(DMA1_Channel3->CCR, DMA_CCR_MINC);		// Enable memory increment mode
+	CLEAR_BIT(DMA1_Channel3->CCR, DMA_CCR_PINC);	// Disable peripheral increment mode
+	SET_BIT(DMA1_Channel3->CCR, DMA_CCR_DIR);		// Direction: from DMA to peripheral
+	SET_BIT(DMA1_Channel3->CCR, DMA_CCR_EN);		// Enable DMA
 }
