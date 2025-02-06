@@ -31,3 +31,4 @@ add_link_options(
 
 
 add_subdirectory(src)
+add_subdirectory(UGUI)

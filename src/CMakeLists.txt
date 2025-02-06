@@ -5,7 +5,6 @@ add_executable(${ENTRY_POINT}.elf
 	${hal_path}/rcc_hdlr.c
 	${hal_path}/gpio_hdlr.c
 	${hal_path}/spi_hdlr.c
-	ssd1306/ssd1306_hdlr.c
 )
 
 target_include_directories(${ENTRY_POINT}.elf
@@ -13,6 +12,11 @@ target_include_directories(${ENTRY_POINT}.elf
 	PUBLIC ${PROJECT_SOURCE_DIR}/inc/CMSIS
 	PUBLIC ${PROJECT_SOURCE_DIR}/inc/hal
 	PUBLIC ${PROJECT_SOURCE_DIR}/src/ssd1306
+	PUBLIC ${PROJECT_SOURCE_DIR}/UGUI
+)
+
+target_link_libraries(${ENTRY_POINT}.elf
+	uGUI
 )
 
 add_custom_command(TARGET ${ENTRY_POINT}.elf

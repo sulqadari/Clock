@@ -6,9 +6,10 @@
                 "${workspaceFolder}/inc",
 				"${workspaceFolder}/inc/CMSIS",
 				"${workspaceFolder}/inc/hal",
-				"${workspaceFolder}/src/ssd1306"
+				"${workspaceFolder}/UGUI"
             ],
             "defines": [
+				"USE_FONT_4X6"
 			],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c17",
